@@ -29,4 +29,10 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
-
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT key, count(val)
+FROM t0
+LATERAL VIEW EXPLODE(t0.c3) et AS key, val
+GROUP BY key
+ORDER BY key ASC;
